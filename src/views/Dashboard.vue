@@ -1,30 +1,54 @@
 <template>
   <v-container>
     <h1>Dashboard</h1>
+
     <v-row>
-      <v-col v-for="sale in sales" :key="`${sale.title}`"
+      <v-col v-for="sale in sales" :key="`${sale.title}`" cols="12" md="4">
+        <SalesGraph :sale="sale" />
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col
+        v-for="statistic in statistics"
+        :key="`${statistic.title}`"
         cols="12"
-        md="4"
+        md="6"
+        lg="3"
       >
-        <SalesGraph  :sale="sale" />
+        <StatisticCard :statistic="statistic" />
       </v-col>
     </v-row>
+
     <v-row>
-      <v-col v-for="statistic in statistics" :key="`${statistic.title}`">
-        <StatisticCard
-          :statistic="statistic"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="8">
+      <v-col cols="12" md="8">
         <EmployeesTable :employees="employees" @select-employee="setEmployee" />
       </v-col>
-      <v-col cols="4">
+      <v-col cols="12" md="4">
         <EventTimeline :timeline="timeline" />
       </v-col>
     </v-row>
-    <v-snackbar v-model="snackbar" :left="$vuetify.breakpoint.lg">
+
+    <v-row id="below-the-fold">
+      <v-col cols="12" md="8">
+        <EmployeesTable :employees="employees" @select-employee="setEmployee" />
+      </v-col>
+      <v-col cols="12" md="4">
+        <EventTimeline :timeline="timeline" />
+      </v-col>
+    </v-row>
+
+    <v-row id="more-content">
+      <v-col>
+        <v-skeleton-loader
+          ref="skeleton"
+          type="table"
+          class="mx-auto"
+        ></v-skeleton-loader>
+      </v-col>
+    </v-row>
+
+    <v-snackbar v-model="snackbar" :left="$vuetify.breakpoint.lgAndUp">
       You have selected {{ selectedEmployee.name }},
       {{ selectedEmployee.title }}
       <v-btn color="pink" text @click="snackbar = false">
